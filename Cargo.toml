@@ -1,5 +1,5 @@
 [package]
-name = "shitd"
+name = "shittd"
 version = "0.1.0"
 edition = "2021"
 description = "A silly CLI for tracking your shit to do"
@@ -7,5 +7,7 @@ description = "A silly CLI for tracking your shit to do"
 [dependencies]
 clap = {version="4.5.16", features = ["derive"]}
 anyhow = "1.0.9"
-serde = {"1.0.209", features = ["derive"]}
-chrono = {"0.4.38", features = ["serde"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0.127"
+chrono = {version="0.4.38", features = ["serde"] }
+home = "0.5.9"
