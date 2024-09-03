@@ -3,7 +3,7 @@ use clap::{Parser, Subcommand, ValueEnum};
 
 #[derive(Debug, Parser)]
 #[command(name = "shittd")]
-#[command(about="Shit to do", long_about = None)]
+#[command(about="A manager for your shit to do list", long_about = None)]
 pub struct Cli {
     #[command(subcommand)]
     pub command: Commands,
