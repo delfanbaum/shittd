@@ -6,7 +6,7 @@ use clap::{Parser, Subcommand, ValueEnum};
 #[command(about="Shit to do", long_about = None)]
 pub struct Cli {
     #[command(subcommand)]
-    command: Commands,
+    pub command: Commands,
 }
 
 #[derive(Debug, Subcommand)]

@@ -1,5 +1,6 @@
 use anyhow::Result;
 use core::panic;
+use serde::{Deserialize, Serialize};
 use serde_json;
 use std::{
     fs::{self, File},
@@ -9,7 +10,7 @@ use std::{
 
 use crate::task::Task;
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Db {
     pub db_path: Box<Path>,
     pub tasks: Vec<Task>,
@@ -42,8 +43,33 @@ impl Db {
     }
 
     pub fn open(&mut self) -> Result<()> {
-        let read_file = fs::read_to_string("~/.shittd.json").expect("Unable to read in data file");
+        let read_file =
+            fs::read_to_string(self.db_path.as_os_str()).expect("Unable to read in data file");
         self.tasks = serde_json::from_str(&read_file).expect("Invalid data file.");
         Ok(())
+    }
+
+    pub fn save(self) -> Result<()> {
+        fs::write(
+            self.db_path,
+            serde_json::to_string_pretty(&self.tasks).unwrap(),
+        )
+        .expect("Unable to write data file.");
+        Ok(())
+    }
+
+    pub fn get_next_id(&self) -> Option<u8> {
+        let max_id = &self.tasks.iter().max_by_key(|task| task.id)?;
+        Some(max_id.id + 1)
+    }
+
+    pub fn insert_task(&mut self, task_name: String) {
+        let next_id = self.get_next_id().unwrap_or(1);
+
+        self.tasks.push(Task {
+            id: next_id,
+            name: task_name,
+            complete: false,
+        });
     }
 }
