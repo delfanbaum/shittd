@@ -19,6 +19,8 @@ fn main() {
             println!("{}", list_std(&db.tasks));
         }
         Commands::List { timeframe: _ } => {
+            // explicit call only needed in this case (for now) 
+            db.order_tasks();
             println!("{}", list_std(&db.tasks));
         }
         Commands::Finish { task_id } => {

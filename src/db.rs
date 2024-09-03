@@ -71,16 +71,25 @@ impl Db {
             name: task_name,
             complete: false,
         });
+        self.order_tasks()
     }
 
     pub fn finish_task(&mut self, tasks_to_finish: Vec<u8>) {
         self.tasks
             .iter_mut()
             .filter(|task| tasks_to_finish.contains(&task.id))
-            .for_each(|t| t.finish())
+            .for_each(|t| t.finish());
+
+        self.order_tasks()
     }
 
     pub fn remove_finished_tasks(&mut self) {
         self.tasks.retain(|t| !t.complete);
+        self.order_tasks()
+    }
+
+    // Orders tasks by complete and then ID
+    pub fn order_tasks(&mut self) {
+        self.tasks.sort_by_key(|t| t.complete);
     }
 }

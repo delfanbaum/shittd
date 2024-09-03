@@ -8,16 +8,16 @@ Current state of the state:
 $ shittd --help
 
 A manager for your shit to do list
-
+                                                                                                                                                                                                                                                                                                                                                    
 Usage: shittd <COMMAND>
-
+                                                                                                                                                                                                                                                                                                                                                    
 Commands:
-  add
-  list
-  finish
-  clean
+  add     Adds a task to the list
+  list    Lists incomplete and completed tasks
+  finish  Finishes one or many tasks by ID
+  clean   Removes completed tasks from the list
   help    Print this message or the help of the given subcommand(s)
-
+                                                                                                                                                                                                                                                                                                                                                    
 Options:
   -h, --help  Print help
 ```

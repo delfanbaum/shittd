@@ -12,6 +12,7 @@ pub struct Cli {
 #[derive(Debug, Subcommand)]
 pub enum Commands {
     #[command(arg_required_else_help = true)]
+    /// Adds a task to the list
     Add {
         #[arg(value_name = "TASK_NAME")]
         task_name: String,
@@ -20,11 +21,13 @@ pub enum Commands {
         //#[arg(short, long, default_value = Local::now())]
         //date: String,
     },
+    /// Lists incomplete and completed tasks
     List {
         #[arg(value_enum, short, long, default_value = "today")]
         timeframe: Timeframe,
     },
     #[command(arg_required_else_help = true)]
+    /// Finishes one or many tasks by ID
     Finish {
         #[arg(value_name = "TASK_ID")]
         task_id: Vec<u8>,
@@ -34,6 +37,8 @@ pub enum Commands {
     //    #[arg(value_name = "TASK_ID")]
     //    task_id: Vec<u8>,
     //},
+ 
+    /// Removes completed tasks from the list
     Clean
 }
 
