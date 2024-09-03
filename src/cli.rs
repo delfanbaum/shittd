@@ -34,6 +34,7 @@ pub enum Commands {
     //    #[arg(value_name = "TASK_ID")]
     //    task_id: Vec<u8>,
     //},
+    Clean
 }
 
 #[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, ValueEnum, Debug)]

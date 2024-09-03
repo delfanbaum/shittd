@@ -72,4 +72,15 @@ impl Db {
             complete: false,
         });
     }
+
+    pub fn finish_task(&mut self, tasks_to_finish: Vec<u8>) {
+        self.tasks
+            .iter_mut()
+            .filter(|task| tasks_to_finish.contains(&task.id))
+            .for_each(|t| t.finish())
+    }
+
+    pub fn remove_finished_tasks(&mut self) {
+        self.tasks.retain(|t| !t.complete);
+    }
 }

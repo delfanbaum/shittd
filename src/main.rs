@@ -16,12 +16,18 @@ fn main() {
     match args.command {
         Commands::Add { task_name } => {
             db.insert_task(task_name);
+            println!("{}", list_std(&db.tasks));
         }
         Commands::List { timeframe: _ } => {
             println!("{}", list_std(&db.tasks));
         }
-        _ => {
-            println!("{:?}", args)
+        Commands::Finish { task_id } => {
+            db.finish_task(task_id);
+            println!("{}", list_std(&db.tasks));
+        }
+        Commands::Clean => {
+            db.remove_finished_tasks();
+            println!("{}", list_std(&db.tasks));
         }
     }
 
