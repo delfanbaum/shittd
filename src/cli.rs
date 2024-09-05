@@ -12,10 +12,10 @@ pub struct Cli {
 #[derive(Debug, Subcommand)]
 pub enum Commands {
     #[command(arg_required_else_help = true)]
-    /// Adds a task to the list
+    /// Adds one or more tasks to the list
     Add {
         #[arg(value_name = "TASK_NAME")]
-        task_name: String,
+        tasks: Vec<String>,
 
         //// this feels like it needs some kind of parser
         //#[arg(short, long, default_value = Local::now())]

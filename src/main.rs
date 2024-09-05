@@ -14,12 +14,14 @@ fn main() {
     let args = Cli::parse();
 
     match args.command {
-        Commands::Add { task_name } => {
-            db.insert_task(task_name);
+        Commands::Add { tasks } => {
+            for task in tasks {
+                db.insert_task(task);
+            }
             println!("{}", list_std(&db.tasks));
         }
         Commands::List { timeframe: _ } => {
-            // explicit call only needed in this case (for now) 
+            // explicit call only needed in this case (for now)
             db.order_tasks();
             println!("{}", list_std(&db.tasks));
         }
