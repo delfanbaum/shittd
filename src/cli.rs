@@ -16,12 +16,12 @@ pub enum Commands {
     Add {
         #[arg(value_name = "TASK_NAME")]
         tasks: Vec<String>,
-
         //// this feels like it needs some kind of parser
         //#[arg(short, long, default_value = Local::now())]
         //date: String,
     },
     /// Lists incomplete and completed tasks
+    #[command(aliases = ["ls"])]
     List {
         #[arg(value_enum, short, long, default_value = "today")]
         timeframe: Timeframe,
@@ -37,9 +37,8 @@ pub enum Commands {
     //    #[arg(value_name = "TASK_ID")]
     //    task_id: Vec<u8>,
     //},
- 
     /// Removes completed tasks from the list
-    Clean
+    Clean,
 }
 
 #[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, ValueEnum, Debug)]
