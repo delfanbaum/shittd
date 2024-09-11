@@ -21,9 +21,9 @@ impl Default for Task {
 }
 
 impl Task {
-    // ignore dates for the time being; start simple!
+    // pushing sets the date to "tomorrow"
     pub fn push(&mut self) {
-        self.date = self.date.checked_add_days(Days::new(1)).unwrap()
+        self.date = Local::now().date_naive() + Days::new(1)
     }
     pub fn finish(&mut self) {
         self.complete = true
