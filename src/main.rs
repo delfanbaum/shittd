@@ -1,38 +1,57 @@
+use chrono::Local;
 use clap::Parser;
 use shittd::{
     cli::{Cli, Commands},
+    dates::Timeframe,
     db::Db,
     display::list_std,
+    task::parse_date,
 };
 
 fn main() {
     let mut db = Db {
         ..Default::default()
     };
-    db.init().expect("Unable to open or create db");
 
     let args = Cli::parse();
 
+    match db.init() {
+        Ok(_) => (),
+        Err(_) => db.update().expect("Unable to read or automatically correct the database file. Please manually fix or update ~/.shittd.json and try again"),
+    }
+
     match args.command {
-        Commands::Add { tasks } => {
-            for task in tasks {
-                db.insert_task(task);
+        Commands::Add { tasks, date } => {
+            let mut task_date = Local::now().date_naive();
+            if date.is_some() {
+                task_date = parse_date(date.unwrap()).expect("Unable to parse date");
             }
-            println!("{}", list_std(&db.tasks));
+            for task in tasks {
+                db.insert_task(task, task_date);
+            }
+            println!("{}", list_std(&db.tasks, Timeframe::Today));
         }
-        Commands::List { timeframe: _ } => {
+        Commands::List { timeframe } => {
             // explicit call only needed in this case (for now)
             db.order_tasks();
-            println!("{}", list_std(&db.tasks));
+            println!("{}", list_std(&db.tasks, timeframe));
+        }
+        Commands::Push { task_id } => {
+            db.push_tasks(task_id);
+            println!("{}", list_std(&db.tasks, Timeframe::Today));
         }
         Commands::Finish { task_id } => {
-            db.finish_task(task_id);
-            println!("{}", list_std(&db.tasks));
+            db.finish_tasks(task_id);
+            println!("{}", list_std(&db.tasks, Timeframe::Today));
         }
         Commands::Clean => {
             db.remove_finished_tasks();
-            println!("{}", list_std(&db.tasks));
+            println!("{}", list_std(&db.tasks, Timeframe::Today));
         }
+        Commands::UpdateDb => match db.update() {
+            Ok(_) => println!("Successfully updated the database."),
+            Err(e) => eprintln!("Error updating the database: {}", e),
+        },
     }
 
     db.save().expect("Unable to write db");

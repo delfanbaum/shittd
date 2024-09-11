@@ -1,5 +1,5 @@
-use clap::{Parser, Subcommand, ValueEnum};
-//use chrono::{NaiveDate, Local};
+use crate::dates::Timeframe;
+use clap::{Parser, Subcommand};
 
 #[derive(Debug, Parser)]
 #[command(name = "shittd")]
@@ -16,9 +16,9 @@ pub enum Commands {
     Add {
         #[arg(value_name = "TASK_NAME")]
         tasks: Vec<String>,
-        //// this feels like it needs some kind of parser
-        //#[arg(short, long, default_value = Local::now())]
-        //date: String,
+        /// Optionally provide a calendar date for this task
+        #[arg(short, long)]
+        date: Option<String>,
     },
     /// Lists incomplete and completed tasks
     #[command(aliases = ["ls"])]
@@ -32,19 +32,16 @@ pub enum Commands {
         #[arg(value_name = "TASK_ID")]
         task_id: Vec<u8>,
     },
-    //#[command(arg_required_else_help = true)]
-    //Push {
-    //    #[arg(value_name = "TASK_ID")]
-    //    task_id: Vec<u8>,
-    //},
+    /// Pushes a task off to the following day
+    #[command(arg_required_else_help = true)]
+    Push {
+        #[arg(value_name = "TASK_ID")]
+        task_id: Vec<u8>,
+    },
     /// Removes completed tasks from the list
     Clean,
-}
 
-#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, ValueEnum, Debug)]
-pub enum Timeframe {
-    Today,
-    Tomorrow,
-    Week,
-    Any,
+    /// Updates your .shittd.json file after upgrades, and yes, someday this should happen
+    /// more automatically.
+    UpdateDb,
 }

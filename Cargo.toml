@@ -1,8 +1,8 @@
 [package]
 name = "shittd"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
-description = "A silly CLI for tracking your shit to do"
+description = "A silly CLI tool for tracking your shit to do"
 
 [dependencies]
 clap = {version="4.5.16", features = ["derive"]}

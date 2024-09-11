@@ -1,4 +1,5 @@
 use anyhow::Result;
+use chrono::NaiveDate;
 use core::panic;
 use serde::{Deserialize, Serialize};
 use serde_json;
@@ -42,10 +43,33 @@ impl Db {
         }
     }
 
+    pub fn update(&mut self) -> Result<()> {
+        #[derive(Serialize, Deserialize, Debug)]
+        struct OldFormat {
+            id: u8,
+            name: String,
+            complete: bool,
+        }
+        let read_file =
+            fs::read_to_string(self.db_path.as_os_str()).expect("Unable to read in data file");
+        let prior_tasks: Vec<OldFormat> =
+            serde_json::from_str(&read_file).expect("Invalid data file.");
+        self.tasks = prior_tasks
+            .iter()
+            .map(|t| Task {
+                id: t.id,
+                name: t.name.clone(),
+                complete: t.complete,
+                ..Default::default()
+            })
+            .collect();
+        Ok(())
+    }
+
     pub fn open(&mut self) -> Result<()> {
         let read_file =
             fs::read_to_string(self.db_path.as_os_str()).expect("Unable to read in data file");
-        self.tasks = serde_json::from_str(&read_file).expect("Invalid data file.");
+        self.tasks = serde_json::from_str(&read_file)?;
         Ok(())
     }
 
@@ -63,18 +87,28 @@ impl Db {
         Some(max_id.id + 1)
     }
 
-    pub fn insert_task(&mut self, task_name: String) {
+    pub fn insert_task(&mut self, task_name: String, date: NaiveDate) {
         let next_id = self.get_next_id().unwrap_or(1);
 
         self.tasks.push(Task {
             id: next_id,
             name: task_name,
+            date,
             complete: false,
         });
         self.order_tasks()
     }
 
-    pub fn finish_task(&mut self, tasks_to_finish: Vec<u8>) {
+    pub fn push_tasks(&mut self, tasks_to_finish: Vec<u8>) {
+        self.tasks
+            .iter_mut()
+            .filter(|task| tasks_to_finish.contains(&task.id))
+            .for_each(|t| t.push());
+
+        self.order_tasks()
+    }
+
+    pub fn finish_tasks(&mut self, tasks_to_finish: Vec<u8>) {
         self.tasks
             .iter_mut()
             .filter(|task| tasks_to_finish.contains(&task.id))
