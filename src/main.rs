@@ -48,10 +48,6 @@ fn main() {
             db.remove_finished_tasks();
             println!("{}", list_std(&db.tasks, Timeframe::Today));
         }
-        Commands::UpdateDb => match db.update() {
-            Ok(_) => println!("Successfully updated the database."),
-            Err(e) => eprintln!("Error updating the database: {}", e),
-        },
     }
 
     db.save().expect("Unable to write db");

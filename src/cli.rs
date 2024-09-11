@@ -32,7 +32,7 @@ pub enum Commands {
         #[arg(value_name = "TASK_ID")]
         task_id: Vec<u8>,
     },
-    /// Pushes a task off to the following day
+    /// Pushes task(s) off to the following day
     #[command(arg_required_else_help = true)]
     Push {
         #[arg(value_name = "TASK_ID")]
@@ -40,8 +40,4 @@ pub enum Commands {
     },
     /// Removes completed tasks from the list
     Clean,
-
-    /// Updates your .shittd.json file after upgrades, and yes, someday this should happen
-    /// more automatically.
-    UpdateDb,
 }
