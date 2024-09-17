@@ -124,6 +124,48 @@ impl Db {
 
     // Orders tasks by complete and then ID
     pub fn order_tasks(&mut self) {
-        self.tasks.sort_by_key(|t| t.complete);
+        self.tasks.sort_by_key(|t| (t.complete, t.date));
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use chrono::{Days, Local};
+
+    use super::*;
+
+    #[test]
+    fn test_order() {
+        let first = Task {
+            name: "Incomplete Soonest".to_string(),
+            ..Default::default()
+        };
+        let second = Task {
+            name: "Incomplete later".to_string(),
+            date: Local::now().date_naive() + Days::new(3),
+            ..Default::default()
+        };
+        let third = Task {
+            name: "Complete Sooner".to_string(),
+            complete: true,
+            ..Default::default()
+        };
+        let fourth = Task {
+            name: "Complete later".to_string(),
+            date: Local::now().date_naive() + Days::new(3),
+            complete: true,
+            ..Default::default()
+        };
+
+        let mut db = Db {
+            tasks: vec![fourth.clone(), third.clone(), second.clone(), first.clone()],
+            ..Default::default()
+        };
+        db.order_tasks();
+        let mut tasks_iter = db.tasks.iter();
+        assert_eq!(tasks_iter.next().unwrap().name, first.name);
+        assert_eq!(tasks_iter.next().unwrap().name, second.name);
+        assert_eq!(tasks_iter.next().unwrap().name, third.name);
+        assert_eq!(tasks_iter.next().unwrap().name, fourth.name);
     }
 }

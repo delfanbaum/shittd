@@ -1,7 +1,7 @@
 use chrono::{DateTime, Days, Local, NaiveDate};
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct Task {
     pub id: u8,
     pub name: String,
