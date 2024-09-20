@@ -2,7 +2,12 @@
 name = "shittd"
 version = "0.1.1"
 edition = "2021"
-description = "A silly CLI tool for tracking your shit to do"
+description = "A silly CLI tool for managing the shit you have to do"
+repository = "https://github.com/delfanbaum/shittd"
+readme = "README.md"
+license = "Apache-2.0"
+keywords = ["cli", "shittd", "to do list"]
+categories = ["command-line-utilities"]
 
 [dependencies]
 clap = {version="4.5.16", features = ["derive"]}
