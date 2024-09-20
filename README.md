@@ -20,8 +20,9 @@ Options:
   -h, --help  Print help
 ```
 
-Better readme and examples forthcoming. For information about individual
-commands, run:
+Better README and examples forthcoming.
+
+For information about individual commands, run:
 
 ```
 $ shittd <COMMAND> --help
