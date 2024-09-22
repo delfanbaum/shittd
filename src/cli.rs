@@ -23,7 +23,7 @@ pub enum Commands {
     /// Lists incomplete and completed tasks
     #[command(aliases = ["ls"])]
     List {
-        #[arg(value_enum, short, long, default_value = "today")]
+        #[arg(value_enum, default_value = "today")]
         timeframe: Timeframe,
     },
     #[command(arg_required_else_help = true)]
@@ -32,11 +32,14 @@ pub enum Commands {
         #[arg(value_name = "TASK_ID")]
         task_id: Vec<u8>,
     },
-    /// Pushes task(s) off to the following day
+    /// Pushes task(s) off to the following day, or optionally a specific calendar date
     #[command(arg_required_else_help = true)]
     Push {
         #[arg(value_name = "TASK_ID")]
-        task_id: Vec<u8>,
+        tasks: Vec<u8>,
+
+        #[arg(short, long)]
+        date: Option<String>,
     },
     /// Removes completed tasks from the list
     Clean,

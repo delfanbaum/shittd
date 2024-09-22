@@ -9,7 +9,7 @@ use std::{
     path::Path,
 };
 
-use crate::task::Task;
+use crate::task::{parse_date, Task};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Db {
@@ -99,12 +99,19 @@ impl Db {
         self.order_tasks()
     }
 
-    pub fn push_tasks(&mut self, tasks_to_finish: Vec<u8>) {
-        self.tasks
-            .iter_mut()
-            .filter(|task| tasks_to_finish.contains(&task.id))
-            .for_each(|t| t.push());
-
+    pub fn push_tasks(&mut self, tasks_to_finish: Vec<u8>, date: Option<String>) {
+        if date.is_some() {
+            let new_date = parse_date(date.unwrap()).expect("Unable to parse date");
+            self.tasks
+                .iter_mut()
+                .filter(|task| tasks_to_finish.contains(&task.id))
+                .for_each(|t| t.date = new_date);
+        } else {
+            self.tasks
+                .iter_mut()
+                .filter(|task| tasks_to_finish.contains(&task.id))
+                .for_each(|t| t.push());
+        }
         self.order_tasks()
     }
 

@@ -36,8 +36,8 @@ fn main() {
             db.order_tasks();
             println!("{}", list_std(&db.tasks, timeframe));
         }
-        Commands::Push { task_id } => {
-            db.push_tasks(task_id);
+        Commands::Push { tasks, date } => {
+            db.push_tasks(tasks, date);
             println!("{}", list_std(&db.tasks, Timeframe::Today));
         }
         Commands::Finish { task_id } => {
