@@ -2,6 +2,7 @@ use crate::{
     dates::{task_in_timeframe, Timeframe},
     task::Task,
 };
+use chrono::Local;
 use tabled::{builder::Builder, settings::Style as TabledStyle};
 use term_size::dimensions;
 
@@ -29,6 +30,8 @@ pub fn list_std(tasks: &[Task], timeframe: Timeframe) -> String {
         - "Status".len()
     };
 
+    let mut group_date = Local::now().date_naive();
+
     for task in tasks.iter().filter(|t| task_in_timeframe(t, timeframe)) {
         let mut wrapped_text = String::new();
         let wrapped_lines = textwrap::wrap(task.name.as_str(), text_width);
@@ -42,6 +45,14 @@ pub fn list_std(tasks: &[Task], timeframe: Timeframe) -> String {
             false => " [ ]".to_string(),
         };
 
+        // separate days
+        if task.date > group_date {
+            // reset
+            group_date = task.date;
+            // add seperator
+            builder.push_record(["", "", "", ""])
+        }
+
         builder.push_record([
             task.id.to_string(),
             wrapped_text,
@@ -51,5 +62,5 @@ pub fn list_std(tasks: &[Task], timeframe: Timeframe) -> String {
     }
 
     println!(); // blank line for beauty reasons
-    builder.build().with(TabledStyle::psql()).to_string()
+    builder.build().with(TabledStyle::modern()).to_string()
 }
