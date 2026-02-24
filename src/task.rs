@@ -28,6 +28,10 @@ impl Task {
     pub fn finish(&mut self) {
         self.complete = true
     }
+
+    pub fn renumber(&mut self, new_id: u8) {
+        self.id = new_id
+    }
 }
 
 pub fn parse_date(value: String) -> Result<NaiveDate, String> {

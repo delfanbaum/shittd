@@ -41,6 +41,8 @@ pub enum Commands {
         #[arg(short, long)]
         date: Option<String>,
     },
+    /// Renumbers task IDs
+    Renumber,
     /// Removes completed tasks from the list
     Clean,
 }

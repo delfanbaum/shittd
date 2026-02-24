@@ -129,6 +129,16 @@ impl Db {
         self.order_tasks()
     }
 
+    // Renumbers tasks starting at 1 again
+    pub fn renumber_tasks(&mut self) {
+        self.order_tasks();
+        let mut next_id = 1;
+        for task in self.tasks.iter_mut() {
+            task.renumber(next_id);
+            next_id += 1
+        }
+    }
+
     // Orders tasks by complete and then ID
     pub fn order_tasks(&mut self) {
         self.tasks.sort_by_key(|t| (t.complete, t.date));

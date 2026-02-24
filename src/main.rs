@@ -44,6 +44,10 @@ fn main() {
             db.finish_tasks(task_id);
             println!("{}", list_std(&db.tasks, Timeframe::Today));
         }
+        Commands::Renumber => {
+            db.renumber_tasks();
+            println!("{}", list_std(&db.tasks, Timeframe::Today));
+        }
         Commands::Clean => {
             db.remove_finished_tasks();
             println!("{}", list_std(&db.tasks, Timeframe::Today));
