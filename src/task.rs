@@ -5,7 +5,12 @@ use serde::{Deserialize, Serialize};
 pub struct Task {
     pub id: u8,
     pub name: String,
-    pub date: NaiveDate,
+    /// Eventually this will be like a foreign key
+    pub project: Option<String>,
+    /// Date at which at ask is actually due
+    pub due_date: Option<NaiveDate>,
+    /// Date after which task is no longer valid and can be removed
+    pub invalid_date: Option<NaiveDate>,
     pub complete: bool,
 }
 
@@ -14,7 +19,9 @@ impl Default for Task {
         Task {
             id: 0,
             name: "Some Task".to_string(),
-            date: Local::now().date_naive(),
+            project: None,
+            due_date: None,
+            invalid_date: None,
             complete: false,
         }
     }
@@ -23,8 +30,9 @@ impl Default for Task {
 impl Task {
     // pushing sets the date to "tomorrow"
     pub fn push(&mut self) {
-        self.date = Local::now().date_naive() + Days::new(1)
+        self.due_date = Some(Local::now().date_naive() + Days::new(1))
     }
+
     pub fn finish(&mut self) {
         self.complete = true
     }

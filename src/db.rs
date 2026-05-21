@@ -87,13 +87,20 @@ impl Db {
         Some(max_id.id + 1)
     }
 
-    pub fn insert_task(&mut self, task_name: String, date: NaiveDate) {
+    pub fn insert_task(
+        &mut self,
+        task_name: String,
+        project: Option<String>,
+        due_date: Option<NaiveDate>,
+    ) {
         let next_id = self.get_next_id().unwrap_or(1);
 
         self.tasks.push(Task {
             id: next_id,
             name: task_name,
-            date,
+            project,
+            due_date,
+            invalid_date: None, // TODO
             complete: false,
         });
         self.order_tasks()
@@ -105,7 +112,7 @@ impl Db {
             self.tasks
                 .iter_mut()
                 .filter(|task| tasks_to_finish.contains(&task.id))
-                .for_each(|t| t.date = new_date);
+                .for_each(|t| t.due_date = Some(new_date));
         } else {
             self.tasks
                 .iter_mut()
@@ -141,7 +148,7 @@ impl Db {
 
     // Orders tasks by complete and then ID
     pub fn order_tasks(&mut self) {
-        self.tasks.sort_by_key(|t| (t.complete, t.date));
+        self.tasks.sort_by_key(|t| (t.complete, t.due_date));
     }
 }
 
@@ -159,7 +166,7 @@ mod tests {
         };
         let second = Task {
             name: "Incomplete later".to_string(),
-            date: Local::now().date_naive() + Days::new(3),
+            due_date: Some(Local::now().date_naive() + Days::new(3)),
             ..Default::default()
         };
         let third = Task {
@@ -169,7 +176,7 @@ mod tests {
         };
         let fourth = Task {
             name: "Complete later".to_string(),
-            date: Local::now().date_naive() + Days::new(3),
+            due_date: Some(Local::now().date_naive() + Days::new(3)),
             complete: true,
             ..Default::default()
         };

@@ -16,9 +16,12 @@ pub enum Commands {
     Add {
         #[arg(value_name = "TASK_NAME")]
         tasks: Vec<String>,
+        /// Optionally provide a project name for a task (for sorting)
+        #[arg(short, long)]
+        project: Option<String>,
         /// Optionally provide a calendar date for this task
         #[arg(short, long)]
-        date: Option<String>,
+        due_date: Option<String>,
     },
     /// Lists incomplete and completed tasks
     #[command(aliases = ["ls"])]
@@ -26,7 +29,7 @@ pub enum Commands {
         #[arg(value_enum, default_value = "today")]
         timeframe: Timeframe,
     },
-    #[command(arg_required_else_help = true)]
+    #[command(arg_required_else_help = true, aliases=["complete"])]
     /// Finishes one or many tasks by ID
     Finish {
         #[arg(value_name = "TASK_ID")]
@@ -41,8 +44,11 @@ pub enum Commands {
         #[arg(short, long)]
         date: Option<String>,
     },
+    /// Lists the tasks due in the next five days
+    Due,
     /// Renumbers task IDs
     Renumber,
     /// Removes completed tasks from the list
+    #[command(aliases = ["clear"])]
     Clean,
 }

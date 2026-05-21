@@ -21,9 +21,9 @@ fn main() {
     }
 
     match args.command {
-        Commands::Add { tasks, date } => {
+        Commands::Add { tasks, project, due_date } => {
             let mut task_date = Local::now().date_naive();
-            if date.is_some() {
+            if due_date.is_some() {
                 task_date = parse_date(date.unwrap()).expect("Unable to parse date");
             }
             for task in tasks {
@@ -44,6 +44,7 @@ fn main() {
             db.finish_tasks(task_id);
             println!("{}", list_std(&db.tasks, Timeframe::Today));
         }
+        Commands::Due => todo!(),
         Commands::Renumber => {
             db.renumber_tasks();
             println!("{}", list_std(&db.tasks, Timeframe::Today));
