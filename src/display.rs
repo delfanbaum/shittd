@@ -40,7 +40,6 @@ pub fn list_std(tasks: &[Task], timeframe: Timeframe) -> String {
         - date_len
         - done_len
     };
-    println!("{} {}", width, text_width);
 
     let mut group_date = Local::now().date_naive();
 
