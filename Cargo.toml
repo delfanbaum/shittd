@@ -6,7 +6,7 @@ description = "A silly CLI tool for managing the shit you have to do"
 repository = "https://github.com/delfanbaum/shittd"
 readme = "README.md"
 license = "Apache-2.0"
-keywords = ["cli", "shittd", "to do list", "task manager"]
+keywords = ["cli", "shittd", "task-manager", "tasks", "todos"]
 categories = ["command-line-utilities"]
 
 [dependencies]
