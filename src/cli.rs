@@ -1,7 +1,4 @@
 use crate::dates::Timeframe;
-use crate::task::parse_date;
-use chrono::NaiveDate;
-use chrono::{Days, Local};
 use clap::{Parser, Subcommand};
 
 #[derive(Debug, Parser)]
@@ -70,11 +67,4 @@ pub enum Commands {
     /// Removes completed tasks from the list
     #[command(aliases = ["clear"])]
     Clean,
-}
-
-pub fn handle_date_input(date: Option<String>) -> Option<NaiveDate> {
-    match date {
-        Some(date) => Some(parse_date(date).expect("Unable to parse date")),
-        None => Some(Local::now().date_naive() + Days::new(1)),
-    }
 }

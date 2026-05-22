@@ -34,8 +34,12 @@ impl Task {
     }
 
     pub fn update(&mut self, project: Option<String>, due_date: Option<NaiveDate>) {
-        self.project = project;
-        self.due_date = due_date;
+        if self.project.is_none() {
+            self.project = project;
+        }
+        if self.due_date.is_none() {
+            self.due_date = due_date;
+        }
     }
 
     pub fn finish(&mut self) {

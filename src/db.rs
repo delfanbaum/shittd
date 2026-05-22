@@ -111,10 +111,6 @@ impl Db {
         project: Option<String>,
         date: Option<NaiveDate>,
     ) {
-        // let new_date = match date {
-        //     Some(date) => Some(parse_date(date).expect("Unable to parse date")),
-        //     None => Some(Local::now().date_naive() + Days::new(1)),
-        // };
         self.tasks
             .iter_mut()
             .filter(|task| tasks_to_finish.contains(&task.id))

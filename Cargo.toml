@@ -1,6 +1,6 @@
 [package]
 name = "shittd"
-version = "0.3.2"
+version = "0.3.3"
 edition = "2021"
 description = "A silly CLI tool for managing the shit you have to do"
 repository = "https://github.com/delfanbaum/shittd"

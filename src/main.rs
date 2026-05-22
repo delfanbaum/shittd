@@ -1,7 +1,7 @@
 use chrono::{Days, Local};
 use clap::Parser;
 use shittd::{
-    cli::{handle_date_input, Cli, Commands},
+    cli::{Cli, Commands},
     dates::Timeframe,
     db::Db,
     display::list_std,
@@ -57,7 +57,11 @@ fn main() {
             project,
             date,
         } => {
-            db.update_tasks(tasks, project, handle_date_input(date));
+            let update_date = match date {
+                Some(date) => Some(parse_date(date).expect("Unable to parse date")),
+                None => None,
+            };
+            db.update_tasks(tasks, project, update_date);
             println!("{}", list_std(&db.tasks, Timeframe::Today));
         }
         Commands::Finish { task_id } => {
