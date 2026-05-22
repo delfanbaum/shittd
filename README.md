@@ -1,4 +1,4 @@
-# ShitTD
+# Shittd
 
 A simple CLI tool for managing the shit you've got to do.
 
@@ -30,8 +30,28 @@ For information about individual commands, run:
 $ shittd <COMMAND> --help
 ```
 
+**Pro tip**: I like to alias it to `std` to save some keystrokes. That said, `std`
+wasn't really what I wanted to have the package listed as, so.
+
 ## Task Model
 
+A task is made up of a few things:
+
+* An `id` that you use for saying something's finished or updating it
+* An optional `project` if you like to organize things like that (listing by
+project is a feature forthcoming)
+* An optional `due_date` that will determine what shows up in the default `list`
+(as well as `soon`)
+* A yet-to-be-utilized optional `invalid_date` after which an item will no
+longer show up on the list
+* And, finally, a completion Boolean. 
+
+## Database Model
+
+Right now the database is just a json file located at `.shittd.json` in your
+home directory. The database is currently modeled off of
+[tinydb](https://tinydb.readthedocs.io/en/latest/). Something... different?
+better? will be available eventually.
 
 
 ## Installation

@@ -1,12 +1,12 @@
 [package]
 name = "shittd"
-version = "0.2.0"
+version = "0.3.0"
 edition = "2021"
 description = "A silly CLI tool for managing the shit you have to do"
 repository = "https://github.com/delfanbaum/shittd"
 readme = "README.md"
 license = "Apache-2.0"
-keywords = ["cli", "shittd", "to do list"]
+keywords = ["cli", "shittd", "to do list", "task manager"]
 categories = ["command-line-utilities"]
 
 [dependencies]
