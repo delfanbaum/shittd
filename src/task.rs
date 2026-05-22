@@ -66,3 +66,10 @@ pub fn parse_date(value: String) -> Result<NaiveDate, String> {
             .date_naive())
     }
 }
+
+pub fn task_in_project(task: &Task, project: &str) -> bool {
+    match &task.project {
+        Some(task_project) => task_project == project,
+        None => false,
+    }
+}

@@ -8,7 +8,16 @@ use std::{
     path::Path,
 };
 
-use crate::task::Task;
+use crate::{
+    dates::{task_in_timeframe, Timeframe},
+    task::{task_in_project, Task},
+};
+
+pub enum TaskFilter {
+    Time(Timeframe),
+    Project(String),
+    Completed(bool),
+}
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Db {
@@ -40,6 +49,27 @@ impl Db {
             db_file.write_all(b"{}")?; // empty json
             Ok(())
         }
+    }
+
+    pub fn all_tasks(&self) -> Vec<Task> {
+        self.tasks.clone()
+    }
+
+    pub fn todays_tasks(&self) -> Vec<Task> {
+        self.filter_tasks(vec![TaskFilter::Time(Timeframe::Today)])
+    }
+
+    pub fn filter_tasks(&self, filters: Vec<TaskFilter>) -> Vec<Task> {
+        let mut tasks = self.all_tasks();
+
+        for f in filters.iter() {
+            match f {
+                TaskFilter::Time(timeframe) => tasks.retain(|t| task_in_timeframe(t, *timeframe)),
+                TaskFilter::Project(project) => tasks.retain(|t| task_in_project(t, project)),
+                TaskFilter::Completed(complete) => tasks.retain(|t| t.complete == *complete),
+            }
+        }
+        tasks
     }
 
     pub fn update(&mut self) -> Result<()> {

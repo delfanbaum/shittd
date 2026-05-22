@@ -32,6 +32,9 @@ pub enum Commands {
     List {
         #[arg(value_enum, default_value = "today")]
         timeframe: Timeframe,
+
+        #[arg(short, long)]
+        project: Option<String>,
     },
     #[command(arg_required_else_help = true, aliases=["complete"])]
     /// Finishes one or many tasks by ID

@@ -1,12 +1,9 @@
-use crate::{
-    dates::{task_in_timeframe, Timeframe},
-    task::Task,
-};
+use crate::task::Task;
 use chrono::Local;
 use tabled::{builder::Builder, settings::Style as TabledStyle};
 use term_size::dimensions;
 
-pub fn list_std(tasks: &[Task], timeframe: Timeframe) -> String {
+pub fn list_std(tasks: &[Task]) -> String {
     let mut builder = Builder::new();
 
     let (proj_len, date_len, done_len) = (" Project ".len(), " %Y-%m-%d ".len(), " Done ".len());
@@ -43,7 +40,7 @@ pub fn list_std(tasks: &[Task], timeframe: Timeframe) -> String {
 
     let mut group_date = Local::now().date_naive();
 
-    for task in tasks.iter().filter(|t| task_in_timeframe(t, timeframe)) {
+    for task in tasks.iter() {
         let mut wrapped_text = String::new();
         let wrapped_lines = textwrap::wrap(task.name.as_str(), text_width);
         for line in wrapped_lines {

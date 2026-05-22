@@ -3,7 +3,7 @@ use clap::Parser;
 use shittd::{
     cli::{Cli, Commands},
     dates::Timeframe,
-    db::Db,
+    db::{Db, TaskFilter},
     display::list_std,
     task::parse_date,
 };
@@ -37,12 +37,18 @@ fn main() {
             for task in tasks {
                 db.insert_task(task, project.clone(), task_date);
             }
-            println!("{}", list_std(&db.tasks, Timeframe::Today));
+            println!("{}", list_std(&db.todays_tasks()));
         }
-        Commands::List { timeframe } => {
+        Commands::List { timeframe, project } => {
             // explicit call only needed in this case (for now)
             db.order_tasks();
-            println!("{}", list_std(&db.tasks, timeframe));
+
+            let mut filters = vec![TaskFilter::Time(timeframe)];
+            if let Some(project) = project {
+                filters.push(TaskFilter::Project(project))
+            };
+
+            println!("{}", list_std(&db.filter_tasks(filters)));
         }
         Commands::Push { tasks, date } => {
             let new_date = match date {
@@ -50,36 +56,37 @@ fn main() {
                 None => Some(Local::now().date_naive() + Days::new(1)),
             };
             db.update_tasks(tasks, None, new_date);
-            println!("{}", list_std(&db.tasks, Timeframe::Today));
+            println!("{}", list_std(&db.todays_tasks()));
         }
         Commands::Update {
             tasks,
             project,
             date,
         } => {
-            let update_date = match date {
-                Some(date) => Some(parse_date(date).expect("Unable to parse date")),
-                None => None,
-            };
+            let update_date = date.map(|date| parse_date(date).expect("Unable to parse date"));
+
             db.update_tasks(tasks, project, update_date);
-            println!("{}", list_std(&db.tasks, Timeframe::Today));
+            println!("{}", list_std(&db.todays_tasks()));
         }
         Commands::Finish { task_id } => {
             db.finish_tasks(task_id);
-            println!("{}", list_std(&db.tasks, Timeframe::Today));
+            println!("{}", list_std(&db.todays_tasks()));
         }
         Commands::Soon => {
             db.order_tasks();
             let timeframe = Timeframe::Soon;
-            println!("{}", list_std(&db.tasks, timeframe));
+            println!(
+                "{}",
+                list_std(&db.filter_tasks(vec![TaskFilter::Time(timeframe)]))
+            );
         }
         Commands::Renumber => {
             db.renumber_tasks();
-            println!("{}", list_std(&db.tasks, Timeframe::Today));
+            println!("{}", list_std(&db.todays_tasks()));
         }
         Commands::Clean => {
             db.remove_finished_tasks();
-            println!("{}", list_std(&db.tasks, Timeframe::Today));
+            println!("{}", list_std(&db.todays_tasks()));
         }
     }
 
