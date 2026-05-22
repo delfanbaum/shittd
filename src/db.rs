@@ -1,6 +1,5 @@
 use anyhow::Result;
 use chrono::NaiveDate;
-use core::panic;
 use serde::{Deserialize, Serialize};
 use serde_json;
 use std::{
@@ -9,7 +8,7 @@ use std::{
     path::Path,
 };
 
-use crate::task::{parse_date, Task};
+use crate::task::Task;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Db {
@@ -106,19 +105,20 @@ impl Db {
         self.order_tasks()
     }
 
-    pub fn push_tasks(&mut self, tasks_to_finish: Vec<u8>, date: Option<String>) {
-        if date.is_some() {
-            let new_date = parse_date(date.unwrap()).expect("Unable to parse date");
-            self.tasks
-                .iter_mut()
-                .filter(|task| tasks_to_finish.contains(&task.id))
-                .for_each(|t| t.due_date = Some(new_date));
-        } else {
-            self.tasks
-                .iter_mut()
-                .filter(|task| tasks_to_finish.contains(&task.id))
-                .for_each(|t| t.push());
-        }
+    pub fn update_tasks(
+        &mut self,
+        tasks_to_finish: Vec<u8>,
+        project: Option<String>,
+        date: Option<NaiveDate>,
+    ) {
+        // let new_date = match date {
+        //     Some(date) => Some(parse_date(date).expect("Unable to parse date")),
+        //     None => Some(Local::now().date_naive() + Days::new(1)),
+        // };
+        self.tasks
+            .iter_mut()
+            .filter(|task| tasks_to_finish.contains(&task.id))
+            .for_each(|t| t.update(project.clone(), date));
         self.order_tasks()
     }
 

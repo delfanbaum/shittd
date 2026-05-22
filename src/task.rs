@@ -33,6 +33,11 @@ impl Task {
         self.due_date = Some(Local::now().date_naive() + Days::new(1))
     }
 
+    pub fn update(&mut self, project: Option<String>, due_date: Option<NaiveDate>) {
+        self.project = project;
+        self.due_date = due_date;
+    }
+
     pub fn finish(&mut self) {
         self.complete = true
     }
