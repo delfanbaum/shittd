@@ -25,11 +25,15 @@ fn main() {
             tasks,
             project,
             due_date,
+            today,
         } => {
             let mut task_date = None;
             if let Some(date) = due_date {
                 task_date = Some(parse_date(date).expect("Unable to parse date"));
-            }
+            } else if today {
+                task_date = Some(Local::now().date_naive())
+            };
+
             for task in tasks {
                 db.insert_task(task, project.clone(), task_date);
             }

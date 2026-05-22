@@ -22,9 +22,13 @@ pub enum Commands {
         /// Optionally provide a project name for a task (for sorting)
         #[arg(short, long)]
         project: Option<String>,
-        /// Optionally provide a calendar date for this task
+        /// Optionally provide a due date for this task
         #[arg(short, long)]
         due_date: Option<String>,
+
+        /// Optionally, set the due date to today
+        #[arg(short, long)]
+        today: bool,
     },
     /// Lists incomplete and completed tasks
     #[command(aliases = ["ls"])]

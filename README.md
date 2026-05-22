@@ -15,7 +15,10 @@ Commands:
   add       Adds one or more tasks to the list
   list      Lists incomplete and completed tasks
   finish    Finishes one or many tasks by ID
-  push      Pushes task(s) off to the following day, or optionally a specific calendar date
+  push      Pushes task(s) off to the following day, or optionally a
+            specific calendar date
+  update    Updates task(s) by project and/or date
+  soon      Lists the tasks due in the next three days
   renumber  Renumbers task IDs
   clean     Removes completed tasks from the list
   help      Print this message or the help of the given subcommand(s)

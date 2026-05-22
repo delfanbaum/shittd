@@ -9,7 +9,7 @@ use term_size::dimensions;
 pub fn list_std(tasks: &[Task], timeframe: Timeframe) -> String {
     let mut builder = Builder::new();
 
-    let (proj_len, date_len, done_len) = ("Project".len(), "%Y-%m-%d".len(), "Done".len());
+    let (proj_len, date_len, done_len) = (" Project ".len(), " %Y-%m-%d ".len(), " Done ".len());
     let max_display_width = 100;
 
     // header style TK
